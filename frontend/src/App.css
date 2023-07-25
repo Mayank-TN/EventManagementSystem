@@ -38,6 +38,7 @@
 }
 
 #form{
+  display: inline-block;
   text-align: justify;
    margin-left: 40px;
   width: 500px;
@@ -46,4 +47,17 @@ input{
   width : 250px;
   padding: 10px;
   margin : 5px;
+}
+
+#container{
+  display: inline-block ;
+}
+ 
+#card{
+  display: inline-block;
+  background-color: aliceblue;
+  border: 1px solid black;
+  width: auto;
+  margin: 20px;
+  padding: 20px;
 }

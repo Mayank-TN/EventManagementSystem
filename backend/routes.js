@@ -3,7 +3,7 @@ const eventRouter = express.Router();
 const Events = require('./events');
 const Users = require('./users')
 
-eventRouter.get('/' , async (req,res)=>{
+eventRouter.get('/getData' , async (req,res)=>{
   try {
     if(Object.values(req.query).length === 0){
         const events = await Events.find();
@@ -40,14 +40,14 @@ eventRouter.get('/' , async (req,res)=>{
             //res.json(date);
         }
         else{
-            res.status(400).json({ error : error})
+            res.status(400).json({ message : error})
         }
 
         
     }
     
   } catch (error) {
-    res.status(400).json({ error : error})
+    res.status(400).json({ message : error})
   }
 })
 
@@ -66,10 +66,10 @@ eventRouter.post('/' , async (req,res)=>{
    const locationDateTimeCheck = await Events.find({ location : location , datetime : datetime});
   
   if(locationDateTimeCheck.length >= 1){
-    res.status(401).json({ error : "Event already registered for given date and location"});
+    res.status(401).json({ message : "Event already registered for given date and location"});
   }
    else if(body.eventName.trim().length < 3){
-    res.status(401).json({ error : "Name should have minimum 3 characters"})
+    res.status(401).json({ message : "Name should have minimum 3 characters"})
    }
    else{
     const event = new Events(body); 
@@ -78,7 +78,7 @@ eventRouter.post('/' , async (req,res)=>{
    }
     
    } catch (error) {
-        res.status(400).json({ error : error.message})
+        res.status(400).json({ message : error.message})
    }
 })
 
@@ -93,12 +93,12 @@ eventRouter.put('/:id' ,async (req,res)=>{
     const event = await Events.findById(eventId);
     const activeParticipants = event.activeParticipants;
     if(event.maximumParticipantsAllowed === event.activeParticipants){
-        res.status(401).json({ error : "Event is full. Try another Event"})
+        res.status(401).json({ message : "Event is full. Try another Event"})
     }
     else{
         const user = await Users.find(newUser);
         if(user.length !== 0){
-            res.json({ error : "User already registered for this event"})
+            res.json({ message : "User already registered for this event"})
         }
         else{
             const newEntry = new Users(newUser);
@@ -106,7 +106,7 @@ eventRouter.put('/:id' ,async (req,res)=>{
             await Events.updateOne({ _id : eventId} , {
                 $set : { activeParticipants : activeParticipants+1}
             })
-            res.json({ mesaage : "User enrolled for the event successfully" });
+            res.json({ message : "User enrolled for the event successfully" });
         }
         
     }
