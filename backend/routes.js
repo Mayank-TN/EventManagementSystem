@@ -16,10 +16,14 @@ eventRouter.get('/getData' , async (req,res)=>{
         }
         else if(req.query.from && req.query.to){
              const date1 = req.query.from;
+             let date1Array = date1.split('-');
+             let date1Format = `${date1Array[2]}-${date1Array[1]}-${date1Array[0]}`
              const date2 = req.query.to;
+             let date2Array = date2.split('-');
+             let date2Format = `${date2Array[2]}-${date2Array[1]}-${date2Array[0]}`
             const events = await Events.find();
-            const arr = events.filter((event)=> event.datetime.split(' ')[0] >= date1);
-            const arr2 = arr.filter((event)=> event.datetime.split(' ')[0] <= date2 )
+            const arr = events.filter((event)=> event.datetime.split(' ')[0] >= date1Format);
+            const arr2 = arr.filter((event)=> event.datetime.split(' ')[0] <= date2Format )
             res.status(200).json(arr2);
             // res.json({
             //     from : date1, to : date2
@@ -27,15 +31,19 @@ eventRouter.get('/getData' , async (req,res)=>{
         }
         else if(req.query.from){
             const date = req.query.from;
+            let dateArray = date.split('-');
+            let dateFormat = `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`
             const events = await Events.find();
-            const arr = events.filter((event)=> event.datetime.split(' ')[0] >= date );
+            const arr = events.filter((event)=> event.datetime.split(' ')[0] >= dateFormat );
             res.status(200).json(arr);
            // res.json(date);
         }
         else if(req.query.to){
             const date = req.query.to;
+            let dateArray = date.split('-');
+            let dateFormat = `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`
             const events = await Events.find();
-            const arr = events.filter((event)=> event.datetime.split(' ')[0] <= date );
+            const arr = events.filter((event)=> event.datetime.split(' ')[0] <= dateFormat );
             res.status(200).json(arr);
             //res.json(date);
         }
@@ -63,8 +71,9 @@ eventRouter.post('/' , async (req,res)=>{
    };
    const location = body.location 
    const datetime = body.datetime;
-   const locationDateTimeCheck = await Events.find({ location : location , datetime : datetime});
-  
+   const locationCheck = await Events.find({ location : location});
+   const locationDateTimeCheck = locationCheck.filter((event)=>event.datetime.split(' ')[0]=== req.body.date)
+  //res.json(locationDateTimeCheck)
   if(locationDateTimeCheck.length >= 1){
     res.status(401).json({ message : "Event already registered for given date and location"});
   }

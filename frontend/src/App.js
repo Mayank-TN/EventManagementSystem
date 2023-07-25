@@ -39,6 +39,7 @@ function App() {
     setShowRegisterInput(false);
     getData();
   }
+  
   }
  
   async function getData(){
@@ -98,11 +99,11 @@ function App() {
       timeFormat = `${time.split(":")[0]}:${time.split(":")[1]}AM`
     }
 
-    const dateFormat = `${date.split("-")[2]}-${date.split("-")[1]}-${date.split("-")[0]}`
+   // const dateFormat = `${date.split("-")[2]}-${date.split("-")[1]}-${date.split("-")[0]}`
     const newEvent = {
       eventName : name,
       location : location,
-      date : dateFormat,
+      date : date,
       time : timeFormat,
       maximumParticipantsAllowed : capacity,
       description : description
@@ -176,7 +177,8 @@ function App() {
           <span>MaximumParticipantsAllowed : {event.maximumParticipantsAllowed}</span><br/>
           <span>ActiveParticipants : {event.activeParticipants}</span><br/>
           <span>Description : {event.description}</span><br/>
-          <span>Event Date : {new Date(parseInt(event.datetime.split(" ")[0].split("-")[2]), parseInt(event.datetime.split(" ")[0].split("-")[1]-1),parseInt(event.datetime.split(" ")[0].split("-")[0])).toLocaleDateString()}</span><br/>
+          {/* <span>Event Date : {new Date(parseInt(event.datetime.split(" ")[0].split("-")[0]), parseInt(event.datetime.split(" ")[0].split("-")[1]-1),parseInt(event.datetime.split(" ")[0].split("-")[2])).toLocaleDateString()}</span><br/> */}
+          <span>Event Date : {`${event.datetime.split(" ")[0].split('-')[2]}-${event.datetime.split(" ")[0].split('-')[1]}-${event.datetime.split(" ")[0].split('-')[0]}`}</span><br/>
           <span>Event Time : {event.datetime.split(" ")[1]}</span><br/>
          {
           showRegisterInput ? '' : 
